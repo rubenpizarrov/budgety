@@ -66,14 +66,12 @@ var budgetController = (function(){
         addItem: function (type, des, val) {
             var newItem, ID;
             
-            // Crea un nuevo id tal que será ID = ultimo + 1
+            // Crea un nuevo id tal que, será, ID = ultimo + 1
             if (data.allItems[type].length > 0) {
                 ID = data.allItems[type][data.allItems[type].length - 1].id + 1;    
             } else {
                 ID = 0;
             }
-            
-
             // Crea un nuevo item basado en si es inc= income o exp = expense
             if (type === 'exp') {
                 newItem = new Expense(ID, des, val);
@@ -139,6 +137,21 @@ var UIController = (function (){
 
             },
 
+
+            clearFields: function(){
+                var fields, fieldsArray;
+
+                //es lo mismo que = document.querySelectorAll('.add__description','add__value')
+                fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
+                //Transforma el NodeList en un array
+                fieldsArray = Array.prototype.slice.call(fields);
+                
+                fieldsArray.forEach(function(current, index, array) {
+                    current.value = "";
+                });
+                fieldsArray[0].focus();
+            },
+
             getDOMstrings: function() {
                 return DOMstrings;
             }
@@ -172,6 +185,8 @@ var controller = (function(budgetCtrl, UICtrl){
         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
         //3. Agregar el Item a la UI
         UICtrl.addListItem(newItem, input.type);
+        // 3.5 Limpiar Inputs
+        UICtrl.clearFields();
         //4. Calcular el Budget
 
         //5. Mostrar el budget en la UI
